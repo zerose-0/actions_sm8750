@@ -913,9 +913,17 @@ jobs:
       - name: 📦 Add build name
         run: |
           cd kernel_workspace
-          sudo sed -i "s/-4k/-palaziks-ShiftPorts/g" ./common/arch/arm64/configs/gki_defconfig
+          
+          # Hapus nama bawaan (jika ada) agar tidak bentrok
+          sed -i '/CONFIG_LOCALVERSION=/d' ./common/arch/arm64/configs/gki_defconfig
+          
+          # Paksa masukkan nama custom OnieL
+          echo 'CONFIG_LOCALVERSION="-OnieL"' >> ./common/arch/arm64/configs/gki_defconfig
+          
+          # Matikan auto-versioning agar tidak kepanjangan
           sed -i 's/${scm_version}//' ./common/scripts/setlocalversion
           echo "CONFIG_LOCALVERSION_AUTO=n" >> ./common/arch/arm64/configs/gki_defconfig
+
 
       - name: 🔨 Build Kernel
         run: |
